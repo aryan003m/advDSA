@@ -1,43 +1,109 @@
-// #include<bits/stdc++.h>
+#include <iostream>
+using namespace std;
 
-// using namespace std;
+class Node {
+public:
+    int data;
+    Node* next;
 
-// class Node{
-//     public:
-//     int data;
-//     Nod*next;
-//     Node(int value){
-//         data = value;
-//         next = null;
-//     }
-// };
+    Node(int value) {
+        data = value;
+        next = NULL;
+    }
+};
 
-// class Queue{
-//     Node*rear,*front;
-//     Queue(){
-//         rear = null;
-//         front = null;
-//     }
-//     void enqueue(int value){
-//         Node*newNode = new Node(value);
-//         if( front == null){
-//             front = rear = newNode;
-//         }
-//         else{
-//             rear->next = newNode;
-//             rear = newNode;
-//         }
-        
+class CircularQueue {
+private:
+    Node* front;
+    Node* rear;
 
-//     }
+public:
+    CircularQueue() {
+        front = rear = NULL;
+    }
 
-//     void dequeue(){
+    void enqueue(int value) {
+        Node* newNode = new Node(value);
 
-//     }
-// }
+        if (front == NULL) {
+            front = rear = newNode;
+            rear->next = front;
+        }
+        else {
+            rear->next = newNode;
+            rear = newNode;
+            rear->next = front;
+        }
 
+        cout << value << " inserted\n";
+    }
 
-// int main(){
+    void dequeue() {
+        if (front == NULL) {
+            cout << "Queue Underflow\n";
+            return;
+        }
 
-// return 0;
-// }
+        if (front == rear) {
+            cout << "Deleted: " << front->data << endl;
+
+            delete front;
+
+            front = rear = NULL;
+        }
+        else {
+            Node* temp = front;
+
+            cout << "Deleted: " << front->data << endl;
+
+            front = front->next;
+            rear->next = front;
+
+            delete temp;
+        }
+    }
+
+    void peek() {
+        if (front == NULL) {
+            cout << "Queue is Empty\n";
+            return;
+        }
+
+        cout << "Front element: " << front->data << endl;
+    }
+
+    
+    void display() {
+        if (front == NULL) {
+            cout << "Queue is Empty\n";
+            return;
+        }
+
+        Node* temp = front;
+
+        do {
+            cout << temp->data << " ";
+            temp = temp->next;
+        } while (temp != front);
+
+        cout << endl;
+    }
+};
+
+int main() {
+    CircularQueue q;
+
+    q.enqueue(10);
+    q.enqueue(20);
+    q.enqueue(30);
+    q.enqueue(40);
+
+    q.display();
+
+    q.dequeue();
+    q.display();
+
+    q.peek();
+
+    return 0;
+}
